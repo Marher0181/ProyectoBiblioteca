@@ -19,6 +19,7 @@ def prestar_libro(isbn, id_usuario):
 
 def devolver_libro(isbn):
     libros_prestados = leer_libros_prestados()
+    libroP = libros.buscar_libro_prestado_por_isbn(isbn)
     for libro in libros_prestados:
         if libro[2] == isbn[0]:
             libros.eliminar_libro_prestado(isbn)

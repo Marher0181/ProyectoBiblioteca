@@ -30,7 +30,7 @@ def leer_libro_():
     with open(DATA_FILE, "r") as file:
         for line in file:
             titulo, autor, isbn = line.strip().split(", ")
-            libros.append(isbn + " - " + titulo + " - " + autor)
+            libros.append((isbn, titulo, autor))
         return libros
 
 def leer_libro_prestado():
@@ -41,7 +41,7 @@ def leer_libro_prestado():
     with open("LIBROS_PRESTADOS.txt", "r") as file:
         for line in file:
             titulo, autor, isbn = line.strip().split(", ")
-            libros.append(isbn + " - " + titulo + " - " + autor)
+            libros.append((titulo, autor, isbn))
         return libros
 
 def listar_libros():
@@ -95,5 +95,7 @@ def buscar_libro_por_isbn(isbn):
 
 def buscar_libro_prestado_por_isbn(isbn):
     isbn = isbn.split(" - ")
-    libros = leer_libro()
+    print(isbn)
+    libros = leer_libro_prestado()
+    print(libros)
     return [libro for libro in libros if isbn[0].lower() in libro[2].lower()]
