@@ -15,8 +15,18 @@ def registrar_usuario(nombre):
 
 
 def eliminar_usuario(id_usuario):
-    global usuarios
-    usuarios = [usuario for usuario in usuarios if usuario['id_usuario'] != id_usuario]
+    usuarios = leer_usuarios()
+    listar_usuarios()
+    if id_usuario != "":
+        for l in usuarios:
+            if id_usuario == l[1]:
+                usuarios.pop(usuarios.index(l))
+        guardar_usuarios(usuarios)
+
+def guardar_usuarios(usuaris):
+    with open(DATA_FILE, "w+") as file:
+        for usuario in usuaris:
+            file.write(", ".join(usuario) + "\n")
 
 def buscar_usuario(nombreU):
     return [nombre for nombre in usuarios if nombreU.lower() in nombre['titulo'].lower()]
@@ -24,6 +34,11 @@ def buscar_usuario(nombreU):
 def listar_usuarios():
     usuarios = leer_usuarios()
     return usuarios
+
+def listar_usuarios_():
+    usuarios = leer_usuarios_()
+    return usuarios
+
 
 def leer_usuarios():
     if not os.path.exists(DATA_FILE):
@@ -36,4 +51,14 @@ def leer_usuarios():
             usuarios.append((nombre, id_usuario))
         return usuarios
 
+def leer_usuarios_():
+    if not os.path.exists(DATA_FILE):
+        return []
+
+    usuarios = []
+    with open(DATA_FILE, "r") as file:
+        for line in file:
+            nombre, id_usuario = line.strip().split(", ")
+            usuarios.append(id_usuario + " - " + nombre)
+        return usuarios
 
