@@ -7,21 +7,39 @@ DATA_FILE = "PRESTAMOS.txt"
 def prestar_libro(isbn, id_usuario):
     try:
         libroE = libros.buscar_libro_por_isbn(isbn)
-        agregar_libros_prestados(libroE)
-        libros.eliminar_libro(isbn)
 
         if libroE:
-            with open(DATA_FILE, "a") as file:
-                file.write(f"El usuario: {id_usuario} ISBN: {isbn}, \n")
-        prestamos.append({"isbn": isbn, "id_usuario": id_usuario})
-    except FileNotFoundError:
-        print(f"Error: El archivo {file} no fue encontrado")
+            libros.eliminar_libro(isbn)
 
-def devolver_libro(isbn):
-    libros_prestados = leer_libros_prestados()
-    for libro in libros_prestados:
-        if libro[2] == isbn[0]:
-            libros.eliminar_libro_prestado(isbn)
+            with open("prestamos.txt", "a") as prestamos_file:
+                prestamos_file.write(f"{isbn},{id_usuario}\n")
+
+            print(f"Libro con ISBN {isbn} prestado al usuario {id_usuario}.")
+        else:
+            print(f"Error: El libro con ISBN {isbn} no está disponible.")
+
+    except FileNotFoundError as e:
+        print(f"Error: {str(e)}")
+
+def devolver_libro(isbn, id_usuario):
+    try:
+        with open("prestamos.txt", "r") as prestamos_file:
+            prestamos = prestamos_file.readlines()
+
+        with open("prestamos.txt", "w") as prestamos_file:
+            for prestamo in prestamos:
+                prestamo_isbn, prestamo_usuario = prestamo.strip().split(", ")
+                if prestamo_isbn != isbn or prestamo_usuario != id_usuario:
+                    prestamos_file.write(f"{prestamo}\n")
+
+        with open("libros.txt", "a") as libros_file:
+            libros_file.write(f"{isbn}\n")
+
+        print(f"Libro con ISBN {isbn} devuelto por el usuario {id_usuario}.")
+
+    except FileNotFoundError as e:
+        print(f"Error: {str(e)}")
+
 
 def agregar_libros_prestados(libro):
     libro = libro[0]

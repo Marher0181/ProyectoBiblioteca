@@ -23,15 +23,19 @@ def leer_libro():
         return libros
 
 def leer_libro_():
-    if not os.path.exists(DATA_FILE):
-        return []
-
     libros = []
-    with open(DATA_FILE, "r") as file:
+    with open("LIBROS.txt", "r") as file:
         for line in file:
-            titulo, autor, isbn = line.strip().split(", ")
-            libros.append(isbn + " - " + titulo + " - " + autor)
-        return libros
+            # Asegurarse de que la línea esté bien formateada
+            parts = line.strip().split(", ")
+            if len(parts) == 3:
+                titulo, autor, isbn = parts
+                libros.append((titulo,  autor, isbn))
+            else:
+                print(f"Línea en formato incorrecto: {line.strip()}")
+    return libros
+
+
 
 def leer_libro_prestado():
     if not os.path.exists("LIBROS_PRESTADOS.txt"):
@@ -89,10 +93,14 @@ def buscar_libro(titulo):
     return [libro for libro in libros if titulo.lower() in libro[0].lower()]
 
 def buscar_libro_por_isbn(isbn):
-    isbn = isbn.split(" - ")
-    libros = leer_libro()
-    return [libro for libro in libros if isbn[0].lower() in libro[2].lower()]
+    # Extraer el ISBN de la cadena recibida
+    isbn = isbn.split()[-1]  # Obtiene el último elemento después de dividir por espacios
 
+    # Leer los libros del archivo
+    libros = leer_libro()
+
+    # Buscar y retornar el libro que tenga el ISBN igual al buscado
+    return [libro for libro in libros if isbn.lower() == libro[2].lower()]
 def buscar_libro_prestado_por_isbn(isbn):
     isbn = isbn.split(" - ")
     libros = leer_libro()

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, Toplevel, ttk
+from tkinter import messagebox, Toplevel, ttk, Listbox
 from biblioteca import libros, usuarios, prestamos, morosidad
 
 class BibliotecaApp:
@@ -276,20 +276,55 @@ class BibliotecaApp:
         ventana.title("Devolver Libro")
         ventana.config(bg="#EFEBDF")
 
-        label_isbn = tk.Label(ventana, text="ISBN del Libro:")
-        label_isbn.grid(row=0, column=0)
+        label_isbn = tk.Label(ventana, text="Selecciona el Libro para Devolver:")
+        label_isbn.grid(row=0, column=0, padx=10, pady=10)
 
-        entry_combo = ttk.Combobox(ventana, state="readonly", values=libros.leer_libro_prestado())
-        entry_combo.grid(row=0, column=1)
+        listbox_libros = Listbox(ventana, selectmode=tk.SINGLE, width=50, height=10)
+        listbox_libros.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+        # Leer los datos de prestamos.txt y llenar el Listbox
+        with open("PRESTAMOS.txt", "r") as prestamos_file:
+            prestamos = prestamos_file.readlines()
+
+        for prestamo in prestamos:
+            listbox_libros.insert(tk.END, prestamo.strip())
 
         def devolver_libro():
-            isbn = entry_combo.get()
-            prestamos.devolver_libro(isbn)
-            messagebox.showinfo("Éxito", "Libro devuelto exitosamente")
-            ventana.destroy()
+            # Obtener la selección del Listbox
+            seleccion = listbox_libros.curselection()
+            if seleccion:
+                libro_seleccionado = listbox_libros.get(seleccion[0])
+                # Separar la parte del libro y el usuario
+                parte_libro, parte_usuario = libro_seleccionado.split(",")
 
-        boton_devolver = tk.Button(ventana, text="Devolver Libro", command=devolver_libro,bg="#E0D7BF")
-        boton_devolver.grid(row=2, column=1)
+                # Extraer el ISBN, título y autor
+                isbn_titulo_autor = parte_libro.strip()
+
+                # Devolver el libro y actualizar los archivos
+                devolver_libro_a_biblioteca(isbn_titulo_autor, libro_seleccionado)
+
+                messagebox.showinfo("Éxito", "Libro devuelto exitosamente")
+                ventana.destroy()
+            else:
+                messagebox.showwarning("Advertencia", "Por favor, selecciona un libro para devolver")
+
+        def devolver_libro_a_biblioteca(isbn_titulo_autor, libro_seleccionado):
+            # Añadir el libro de nuevo a LIBROS.txt
+            with open("LIBROS.txt", "a") as libros_file:
+                libros_file.write(f"{isbn_titulo_autor}\n")
+
+            # Eliminar el préstamo de PRESTAMOS.txt
+            with open("PRESTAMOS.txt", "r") as prestamos_file:
+                prestamos = prestamos_file.readlines()
+
+            with open("PRESTAMOS.txt", "w") as prestamos_file:
+                for prestamo in prestamos:
+                    if prestamo.strip() != libro_seleccionado:
+                        prestamos_file.write(prestamo)
+
+        boton_devolver = tk.Button(ventana, text="Devolver Libro", command=devolver_libro, bg="#E0D7BF")
+        boton_devolver.grid(row=2, column=0, columnspan=2, pady=10)
+
 
     def abrir_ventana_morosidad(self):
         ventana = Toplevel(self.root)
