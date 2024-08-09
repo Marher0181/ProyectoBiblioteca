@@ -12,23 +12,26 @@ def prestar_libro(isbn, id_usuario):
 
         if libroE:
             with open(DATA_FILE, "a") as file:
-                file.write(f"El usuario: {id_usuario} ISBN: {isbn}, \n")
-        prestamos.append({"isbn": isbn, "id_usuario": id_usuario})
+                file.write(f"{id_usuario}, {isbn} \n")
+        prestamos.append(f"{id_usuario}, {isbn}")
     except FileNotFoundError:
         print(f"Error: El archivo {file} no fue encontrado")
 
 def devolver_libro(isbn):
     libros_prestados = leer_libros_prestados()
+
     libroP = libros.buscar_libro_prestado_por_isbn(isbn)
+    isbn = isbn.split(" - ")
     for libro in libros_prestados:
         if libro[2] == isbn[0]:
             libros.eliminar_libro_prestado(isbn)
 
 def agregar_libros_prestados(libro):
-    libro = libro[0]
+
+    print(libro)
     with open("LIBROS_PRESTADOS.txt", "a") as file:
         file.write(f"{libro[0]}, {libro[1]}, {libro[2]}\n")
-    libros_prestados.append(f"{libro[0]}, {libro[1]}, {libro[2]}")
+    libros_prestados.append(f"{libro}")
 
 def leer_prestamos():
     if not os.path.exists(DATA_FILE):
@@ -47,5 +50,5 @@ def leer_libros_prestados():
     with open("LIBROS_PRESTADOS.txt", "r") as file:
         for line in file:
             nombre, autor, isbn = line.strip().split(", ")
-            libros.append((nombre, autor, isbn))
+            libros.append((isbn + " - " + nombre + " - " + autor))
         return libros
