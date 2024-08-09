@@ -1,3 +1,5 @@
+import datetime
+
 from biblioteca import libros
 import os
 prestamos = []
@@ -12,7 +14,7 @@ def prestar_libro(isbn, id_usuario):
 
         if libroE:
             with open(DATA_FILE, "a") as file:
-                file.write(f"{id_usuario}, {isbn} \n")
+                file.write(f"{id_usuario}, {isbn}, {datetime.date.today()} \n")
         prestamos.append(f"{id_usuario}, {isbn}")
     except FileNotFoundError:
         print(f"Error: El archivo {file} no fue encontrado")

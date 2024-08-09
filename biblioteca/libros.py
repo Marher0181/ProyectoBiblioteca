@@ -103,7 +103,13 @@ def eliminar_libro_prestado(isbn):
 
 def buscar_libro(titulo):
     libros = leer_libro()
-    return [libro for libro in libros if titulo.lower() in libro[0].lower()]
+    lista=[]
+    for l in libros:
+        l = l.split(" - ")
+        if titulo.lower() in l[1].lower():
+            lista.append(l)
+    return lista
+    #return [libro for libro in libros if titulo.lower() in libro[1].lower()]
 
 def buscar_libro_por_isbn(isbn):
     isbn = isbn.split(" - ")
