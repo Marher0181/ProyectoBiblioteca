@@ -139,7 +139,7 @@ class BibliotecaApp:
             text_resultados.delete(1.0, tk.END)
             if resultados:
                 for libro in resultados:
-                    text_resultados.insert(tk.END, f"Título: {libro[0]}, Autor: {libro[1]}, ISBN: {libro[2]}\n")
+                    text_resultados.insert(tk.END, f"ISBN: {libro[0]}, Título: {libro[1]}, Autor: {libro[2]}")
             else:
                 text_resultados.insert(tk.END, "No se encontraron libros.")
 

@@ -1,3 +1,5 @@
+import datetime
+
 from biblioteca import libros
 import os
 prestamos = []
@@ -7,45 +9,31 @@ DATA_FILE = "PRESTAMOS.txt"
 def prestar_libro(isbn, id_usuario):
     try:
         libroE = libros.buscar_libro_por_isbn(isbn)
+        agregar_libros_prestados(libroE)
+        libros.eliminar_libro(isbn)
 
         if libroE:
-            libros.eliminar_libro(isbn)
+            with open(DATA_FILE, "a") as file:
+                file.write(f"{id_usuario}, {isbn}, {datetime.date.today()} \n")
+        prestamos.append(f"{id_usuario}, {isbn}")
+    except FileNotFoundError:
+        print(f"Error: El archivo {file} no fue encontrado")
 
-            with open("prestamos.txt", "a") as prestamos_file:
-                prestamos_file.write(f"{isbn},{id_usuario}\n")
+def devolver_libro(isbn):
+    libros_prestados = leer_libros_prestados()
 
-            print(f"Libro con ISBN {isbn} prestado al usuario {id_usuario}.")
-        else:
-            print(f"Error: El libro con ISBN {isbn} no está disponible.")
-
-    except FileNotFoundError as e:
-        print(f"Error: {str(e)}")
-
-def devolver_libro(isbn, id_usuario):
-    try:
-        with open("prestamos.txt", "r") as prestamos_file:
-            prestamos = prestamos_file.readlines()
-
-        with open("prestamos.txt", "w") as prestamos_file:
-            for prestamo in prestamos:
-                prestamo_isbn, prestamo_usuario = prestamo.strip().split(", ")
-                if prestamo_isbn != isbn or prestamo_usuario != id_usuario:
-                    prestamos_file.write(f"{prestamo}\n")
-
-        with open("libros.txt", "a") as libros_file:
-            libros_file.write(f"{isbn}\n")
-
-        print(f"Libro con ISBN {isbn} devuelto por el usuario {id_usuario}.")
-
-    except FileNotFoundError as e:
-        print(f"Error: {str(e)}")
-
+    libroP = libros.buscar_libro_prestado_por_isbn(isbn)
+    isbn = isbn.split(" - ")
+    for libro in libros_prestados:
+        if libro[2] == isbn[0]:
+            libros.eliminar_libro_prestado(isbn)
 
 def agregar_libros_prestados(libro):
-    libro = libro[0]
+
+    print(libro)
     with open("LIBROS_PRESTADOS.txt", "a") as file:
         file.write(f"{libro[0]}, {libro[1]}, {libro[2]}\n")
-    libros_prestados.append(f"{libro[0]}, {libro[1]}, {libro[2]}")
+    libros_prestados.append(f"{libro}")
 
 def leer_prestamos():
     if not os.path.exists(DATA_FILE):
@@ -64,5 +52,5 @@ def leer_libros_prestados():
     with open("LIBROS_PRESTADOS.txt", "r") as file:
         for line in file:
             nombre, autor, isbn = line.strip().split(", ")
-            libros.append((nombre, autor, isbn))
+            libros.append((isbn + " - " + nombre + " - " + autor))
         return libros
