@@ -100,23 +100,35 @@ class BibliotecaApp:
     def abrir_ventana_eliminar_libro(self):
         ventana = Toplevel(self.root)
         ventana.title("Eliminar Libro")
-        ventana.config(bg="#EFEBDF")
+        ventana.geometry("500x350")
 
-        label_isbn = tk.Label(ventana, text="ISBN del Libro:")
-        label_isbn.grid(row=0, column=0)
+        listbox = tk.Listbox(ventana, height=15, width=60)
+        listbox.pack()
+        listbox.grid(row=0, column=0)
+        datos = libros.listar_libros()
 
-        entry_isbn = tk.Entry(ventana)
-        entry_isbn.grid(row=0, column=1)
+        if datos != []:
+            for dato in datos:
+                dato = f"Libro: {dato}"
+                listbox.insert(tk.END, dato)
+        else:
+            listbox.insert(tk.END, "No hay datos para mostrar")
 
-        def eliminar_libro():
-            isbn = entry_isbn.get()
-            if isbn != "":
-                libros.eliminar_libro(isbn)
-                messagebox.showinfo("Éxito", "Libro eliminado exitosamente")
-                ventana.destroy()
-            else:
-                messagebox.showwarning("Advertencia!", "Debe agregar un dato válido")
-        boton_eliminar = tk.Button(ventana, text="Eliminar Libro", command=eliminar_libro, bg="#FFB6B5")
+        def seleccion_eliminar():
+            indices = listbox.curselection()
+            if indices != ():
+                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                        .join(listbox.get(i) for i in indices)):
+                    datos = libros.listar_libros_()
+                    datos.pop(indices[0])
+                    libros.guardar_libro_(datos)
+                    messagebox.showinfo("Exito!", "Eliminado exitosamente")
+                    ventana.destroy()
+                else:
+                    ventana.destroy()
+                    messagebox.showwarning("Error!", "Debe seleccionar una venta para eliminarla")
+
+        boton_eliminar = tk.Button(ventana, text="Eliminar Libro", command=seleccion_eliminar, bg="#FFB6B5")
         boton_eliminar.grid(row=1, column=1)
 
     def abrir_ventana_buscar_libro(self):
@@ -189,25 +201,34 @@ class BibliotecaApp:
     def abrir_ventana_eliminar_usuario(self):
         ventana = Toplevel(self.root)
         ventana.title("Eliminar Usuario")
-        ventana.config(bg="#EFEBDF")
+        ventana.geometry("500x350")
 
-        label_id_usuario = tk.Label(ventana, text="ID del Usuario:")
-        label_id_usuario.grid(row=0, column=0)
-
-        entry_id_usuario = tk.Entry(ventana)
-        entry_id_usuario.grid(row=0, column=1)
-
-        def eliminar_usuario():
-
-            id_usuario = entry_id_usuario.get()
-            if id_usuario == "":
-                try:
-                    usuarios.eliminar_usuario(id_usuario)
-                    messagebox.showinfo("Éxito", "Usuario eliminado exitosamente")
+        listbox = tk.Listbox(ventana, height=15, width=60)
+        listbox.pack()
+        listbox.grid(row=0, column=0)
+        datos = usuarios.listar_usuarios_()
+        if datos != []:
+            for dato in datos:
+                dato = f"Usuario: {dato}"
+                listbox.insert(tk.END, dato)
+        else:
+            listbox.insert(tk.END, "No hay datos para mostrar")
+        def seleccion_eliminar():
+            indices = listbox.curselection()
+            if indices != ():
+                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                        .join(listbox.get(i) for i in indices)):
+                    datos = usuarios.listar_usuarios_()
+                    datos.pop(indices[0])
+                    usuarios.guardar_usuarios_(datos)
+                    messagebox.showinfo("Exito!", "Eliminado exitosamente")
                     ventana.destroy()
-                except ValueError:
-                    messagebox.showwarning("Info", "Escriba un dato válido")
-        boton_eliminar = tk.Button(ventana, text="Eliminar Usuario", command=eliminar_usuario, bg="#FFB6B5")
+                else:
+                    ventana.destroy()
+
+            else:
+                messagebox.showwarning("Error!", "Debe seleccionar una venta para eliminarla")
+        boton_eliminar = tk.Button(ventana, text="Eliminar Usuario", command=seleccion_eliminar, bg="#FFB6B5")
         boton_eliminar.grid(row=1, column=1)
 
     def abrir_ventana_listar_usuario(self):
@@ -290,17 +311,11 @@ class BibliotecaApp:
             listbox_libros.insert(tk.END, prestamo.strip())
 
         def devolver_libro():
-            # Obtener la selección del Listbox
             seleccion = listbox_libros.curselection()
             if seleccion:
                 libro_seleccionado = listbox_libros.get(seleccion[0])
-                # Separar la parte del libro y el usuario
                 parte_libro, parte_usuario = libro_seleccionado.split(",")
-
-                # Extraer el ISBN, título y autor
                 isbn_titulo_autor = parte_libro.strip()
-
-                # Devolver el libro y actualizar los archivos
                 devolver_libro_a_biblioteca(isbn_titulo_autor, libro_seleccionado)
 
                 messagebox.showinfo("Éxito", "Libro devuelto exitosamente")

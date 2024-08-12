@@ -1,5 +1,12 @@
-I1, Titulo1, Autor1
-I4, Titulo4, Autor1
-I5, Titulo5, Autor1
-I7, Titulo6, Autor1
-I6, Titulo7, Autor1
+ISBN1, Titulo1, Autor1
+ISBN2, Titulo2, Autor1
+ISBN3, Titulo3, Autor1
+ISBN5, Titulo5, Autor1
+ISBN6, Titulo6, Autor1
+ISBN8, Titulo8, Autor1
+ISBN9, Titulo9, Autor1
+ISBN11, Titulo11, Autor1
+ISBN12, Titulo12, Autor1
+ISBN13, Titulo13, Autor1
+ISBN14, Titulo14, Autor1
+ISBN16, Titulo16, Autor1

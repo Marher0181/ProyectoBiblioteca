@@ -28,6 +28,12 @@ def guardar_usuarios(usuaris):
         for usuario in usuaris:
             file.write(", ".join(usuario) + "\n")
 
+def guardar_usuarios_(usuaris):
+    with open(DATA_FILE, "w+") as file:
+        for usuario in usuaris:
+            usuario = usuario.split(" - ")
+            file.write(f"{usuario[0]}, {usuario[1]}\n")
+
 def buscar_usuario(nombreU):
     return [nombre for nombre in usuarios if nombreU.lower() in nombre['titulo'].lower()]
 

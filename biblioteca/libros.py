@@ -68,6 +68,12 @@ def guardar_libro(libros):
         for libro in libros:
             file.write(f"{libro[0]}, {libro[1]}, {libro[2]}")
 
+def guardar_libro_(libros):
+    with open(DATA_FILE, "w+") as file:
+        for libro in libros:
+            libro = libro.split(" - ")
+            file.write(f"{libro[0]}, {libro[1]}, {libro[2]}\n")
+
 def eliminar_libro(isbn):
     librs = leer_libro()
     lista = []
