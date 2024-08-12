@@ -32,7 +32,7 @@ def agregar_libros_prestados(libro):
 
     print(libro)
     with open("LIBROS_PRESTADOS.txt", "a") as file:
-        file.write(f"{libro[0]}, {libro[1]}, {libro[2]}\n")
+        file.write(f"{libro[0]}, {libro[1]}, {libro[2]}")
     libros_prestados.append(f"{libro}")
 
 def leer_prestamos():
@@ -45,6 +45,17 @@ def leer_prestamos():
             libros.append(isbn + " - " + id_usuario)
         return libros
 
+def leer_prestamos_():
+    if not os.path.exists(DATA_FILE):
+        return []
+    prestamos = []
+    with open(DATA_FILE, "r") as file:
+        for line in file:
+            usuario, libro, fecha_prestamo = line.strip().split(", ")
+            prestamos.append(f"{usuario}, {libro}, {fecha_prestamo}")
+    return prestamos
+
+
 def leer_libros_prestados():
     if not os.path.exists("LIBROS_PRESTADOS.txt"):
         return []
@@ -54,3 +65,29 @@ def leer_libros_prestados():
             nombre, autor, isbn = line.strip().split(", ")
             libros.append((isbn + " - " + nombre + " - " + autor))
         return libros
+
+def listar_prestamos_():
+    prestamos = leer_prestamos_()
+    return prestamos
+
+def guardar_prestamos_(prestamos):
+    with open(DATA_FILE, "w+") as file:
+        for prestamo in prestamos:
+            prestamo = prestamo.split(", ")
+            file.write(f"{prestamo[0]}, {prestamo[1]}, {prestamo[2]}\n")
+
+
+
+def eliminar_lbro_pres(prestamoind):
+    with open("LIBROS_PRESTADOS.txt", "w+") as file:
+        for line in file:
+            isbn, titulo, autor = line.strip().split(", ")
+            concat = isbn + titulo + autor
+            if not prestamoind == concat:
+                guardar_libro_devuelto(prestamoind)
+            else:
+                file.write(f"{isbn}, {titulo}, {autor}")
+
+def guardar_libro_devuelto(prestado):
+    with open("LIBROS.txt", "a") as file:
+        file.write(prestado)

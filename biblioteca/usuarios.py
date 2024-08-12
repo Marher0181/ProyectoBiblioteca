@@ -64,7 +64,7 @@ def leer_usuarios_():
     usuarios = []
     with open(DATA_FILE, "r") as file:
         for line in file:
-            nombre, id_usuario = line.strip().split(", ")
+            id_usuario, nombre  = line.strip().split(", ")
             usuarios.append(id_usuario + " - " + nombre)
         return usuarios
 
