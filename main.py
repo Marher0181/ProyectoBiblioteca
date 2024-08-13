@@ -67,6 +67,7 @@ class BibliotecaApp:
         self.imagen_registrar_usuario = tk.PhotoImage(file=r"Iconos\agregar-usuario.png")
         self.imagen_prestar_libro = tk.PhotoImage(file=r"Iconos\prestar-libro.png")
         self.imagen_devolver_libro = tk.PhotoImage(file=r"Iconos\devolver-libro.png")
+        self.imagen_regresar = tk.PhotoImage(file=r"Iconos\regresar.png")
 
         button = tk.Button(root, text="  Libros", command=self.abrir_ventana_libros, bg="white", fg="#3C372B",
                            font=("Times New Roman", 20, "bold italic"), width=340, height=50, compound="left",
@@ -97,7 +98,7 @@ class BibliotecaApp:
         label = tk.Label(ventana, text="Libros", font=("Times New Roman", 60, "bold italic"), fg="#3C372B",
                          bg="#E8DCBD", compound="center", image=self.imagen_libro_titulo)
         label.pack(pady=10)
-        self.centrar_ventana(ventana, 600, 425)
+        self.centrar_ventana(ventana, 600, 445)
 
         button1 = tk.Button(ventana, text="  Agregar Libro", command=self.abrir_ventana_agregar_libro, bg="white",
                             fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=340, height=50,
@@ -108,16 +109,20 @@ class BibliotecaApp:
         button3 = tk.Button(ventana, text="  Buscar Libro", command=self.abrir_ventana_buscar_libro, bg="white",
                             fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=340, height=50,
                             compound="left", image=self.imagen_buscar_libros)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white", width=35, height=35,
+                            compound="center", image=self.imagen_regresar)
 
         button1.pack(pady=10)
         button3.pack(pady=10)
         button2.pack(pady=10)
+        boton_regresar.pack(pady=10, padx=10, anchor="ne")
+
 
     def abrir_ventana_agregar_libro(self):
         ventana = Toplevel(self.root)
         ventana.title("Agregar Libro")
         ventana.config(bg="#E8DCBD")
-        ventana.geometry("540x240")
+        self.centrar_ventana(ventana, 540,230)
 
         label_titulo = tk.Label(ventana, text="Título del Libro:", bg="#E8DCBD", fg="#3C372B",
                                 font=("Times New Roman", 25, "bold italic"))
@@ -160,17 +165,24 @@ class BibliotecaApp:
                                   font=("Times New Roman", 20, "bold italic"), width=240, height=35, compound="left",
                                   image=self.imagen_agregar_libro)
         boton_agregar.grid(row=3, column=1, pady=5)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=3, column=0, pady=0, padx=10, sticky="sw")
 
     def abrir_ventana_eliminar_libro(self):
         ventana = Toplevel(self.root)
         ventana.title("Eliminar Libro")
         ventana.geometry("240x70")
         ventana.config(bg="#E8DCBD")
-        ventana.geometry("540x100")
+        self.centrar_ventana(ventana, 625, 500)
 
-        listbox = tk.Listbox(ventana, height=15, width=60)
-        listbox.pack()
-        listbox.grid(row=0, column=0)
+
+        label = tk.Label(ventana, text="Seleccione un libro:", bg="#E8DCBD", fg="#3C372B",
+                                font=("Times New Roman", 25, "bold italic"))
+        listbox = tk.Listbox(ventana, height=15, width=60, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+        label.grid()
+        listbox.grid(row=1, column=0, padx=10, sticky="n")
         datos = libros.listar_libros()
 
         if datos != []:
@@ -196,23 +208,28 @@ class BibliotecaApp:
 
         boton_eliminar = tk.Button(ventana, text="Eliminar Libro", command=seleccion_eliminar, bg="#FFB6B5")
         boton_eliminar.grid(row=1, column=1)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=2, column=0, pady=0, padx=10, sticky="se")
 
     def abrir_ventana_buscar_libro(self):
         ventana = Toplevel(self.root)
         ventana.title("Buscar Libro")
-        ventana.geometry("692x300")
         ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 885, 460)
 
         label_titulo = tk.Label(ventana, text="Título del Libro:", bg="#E8DCBD", fg="#3C372B",
                                 font=("Times New Roman", 25, "bold italic"))
         label_titulo.grid(row=0, column=0)
 
-        entry_titulo = tk.Entry(ventana, width=27, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+        entry_titulo = tk.Entry(ventana, width=27, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat",
+                                bd=2)
         entry_titulo.grid(row=0, column=1, padx=0)
 
-        text_resultados = tk.Text(ventana, height=18, width=86)
-        text_resultados.grid(row=2, column=0, columnspan=3, pady=0, padx=0, ipadx=0)
-
+        text_resultados = tk.Text(ventana, height=18, width=86, fg="#3C372B", font=("Times New Roman", 15, "italic"),
+                                  relief="flat", bd=2)
+        text_resultados.grid(row=2, column=0, columnspan=4, pady=0, padx=10, ipadx=0)
         def buscar_libro():
             titulo = entry_titulo.get()
             resultados = libros.buscar_libro(titulo)
@@ -227,6 +244,11 @@ class BibliotecaApp:
                                  font=("Times New Roman", 15, "bold italic"), width=140, height=20, compound="left",
                                  image=self.imagen_buscar_libros)
         boton_buscar.grid(row=0, column=2, pady=0)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=0, column=3, pady=10, padx=10, sticky="ne")
+
 
     def abrir_ventana_usuarios(self):
         ventana = Toplevel(self.root)
@@ -235,8 +257,8 @@ class BibliotecaApp:
         self.imagen_usuarios_titulo = tk.PhotoImage(file=r"Iconos\usuarios-titulo.png")
         label = tk.Label(ventana, text="Usuarios", font=("Times New Roman", 60, "bold italic"), fg="#3C372B",
                          bg="#E8DCBD", compound="center", image=self.imagen_usuarios_titulo)
-        label.pack(pady=10)
-        self.centrar_ventana(ventana,600,425)
+        label.grid(row=0, column=0, pady=10, padx=110)
+        self.centrar_ventana(ventana, 570, 430)
 
 
         button1 = tk.Button(ventana, text="  Agregar Usuario", command=self.abrir_ventana_registrar_usuario, bg="white",
@@ -248,14 +270,20 @@ class BibliotecaApp:
         button3 = tk.Button(ventana, text="  Listar Usuarios", command=self.abrir_ventana_listar_usuario, bg="white",
                             fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=340, height=50,
                             compound="left", image=self.imagen_listar)
-        button1.pack(pady=10)
-        button3.pack(pady=10)
-        button2.pack(pady=10)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=4, column=0, pady=0, padx=10, sticky="ne")
+        button1.grid(row=1, column=0, pady=10, padx=110)
+        button3.grid(row=2, column=0, pady=10, padx=110)
+        button2.grid(row=3, column=0, pady=10, padx=110)
+
 
     def abrir_ventana_registrar_usuario(self):
         ventana = Toplevel(self.root)
         ventana.title("Registrar Usuario")
         ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 560, 150)
 
         label_nombre = tk.Label(ventana, text="Nombre del usuario:", bg="#E8DCBD", fg="#3C372B",
                                 font=("Times New Roman", 25, "bold italic"))
@@ -283,15 +311,20 @@ class BibliotecaApp:
                             fg="#3C372B", font=("Times New Roman", 18, "bold italic"), width=225, height=25,
                             compound="left", image=self.imagen_registrar_usuario)
         boton_registrar.grid(row=2, column=1, pady=5)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=1, column=0, pady=10, padx=10, sticky="w")
 
     def abrir_ventana_eliminar_usuario(self):
         ventana = Toplevel(self.root)
         ventana.title("Eliminar Usuario")
         ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 625, 520)
 
-        listbox = tk.Listbox(ventana, height=15, width=60)
-        listbox.pack()
-        listbox.grid(row=0, column=0)
+        listbox = tk.Listbox(ventana, height=15, width=60, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+
+        listbox.grid(row=1, column=0, padx=10)
         datos = usuarios.listar_usuarios_()
         if datos != []:
             for dato in datos:
@@ -316,14 +349,19 @@ class BibliotecaApp:
                 messagebox.showwarning("Error!", "Debe seleccionar una venta para eliminarla")
         boton_eliminar = tk.Button(ventana, text="Eliminar Usuario", command=seleccion_eliminar, bg="#FFB6B5")
         boton_eliminar.grid(row=1, column=1)
+        boton_eliminar.grid(row=2, column=0, pady=10)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(pady=10, padx=10, sticky="se")
 
     def abrir_ventana_listar_usuario(self):
         ventana = Toplevel(self.root)
         ventana.title("Listar Usuarios")
         ventana.config(bg="#E8DCBD")
-
-        text_resultados = tk.Text(ventana, height=10, width=50)
-        text_resultados.grid(row=2, column=0, columnspan=2)
+        self.centrar_ventana(ventana, 725, 455)
+        text_resultados = tk.Text(ventana, height=18, width=70, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+        text_resultados.grid(row=2, column=0, columnspan=2, padx=10)
 
         def listar_u():
             resultados = usuarios.listar_usuarios()
@@ -339,6 +377,10 @@ class BibliotecaApp:
                             fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=225, height=25,
                             compound="left", image=self.imagen_listar)
         boton_listar.grid(row=1, column=1, pady=5)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=1, column=0, pady=10, padx=10, sticky="w")
 
     def abrir_ventana_prestamos(self):
         ventana = Toplevel(self.root)
@@ -348,7 +390,7 @@ class BibliotecaApp:
         label = tk.Label(ventana, text="Prestamos", font=("Times New Roman", 60, "bold italic"), fg="#3C372B",
                          bg="#E8DCBD", compound="center", image=self.imagen_prestamos_titulo)
         label.pack(pady=10)
-        self.centrar_ventana(ventana,500,340)
+        self.centrar_ventana(ventana, 500, 368)
 
 
         button1 = tk.Button(ventana, text=" Prestar Libro", command=self.abrir_ventana_prestar_libro, bg="white", fg="#3C372B",
@@ -357,25 +399,30 @@ class BibliotecaApp:
         button2 = tk.Button(ventana, text="  Devolver Libro", command=self.abrir_ventana_devolver_libro, bg="white", fg="#3C372B",
                             font=("Times New Roman", 20, "bold italic"), width=340, height=50, compound="left",
                             image=self.imagen_devolver_libro)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white", width=35, height=35,
+                                   compound="center", image=self.imagen_regresar)
         button1.pack(pady=10)
         button2.pack(pady=10)
+        boton_regresar.pack(pady=10, padx=10, anchor="se")
 
     def abrir_ventana_prestar_libro(self):
         ventana = Toplevel(self.root)
         ventana.title("Prestar Libro")
-        ventana.config(bg="#EFEBDF")
-        ventana.geometry("300x300")
+        ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 540, 140)
 
-        label_isbn = tk.Label(ventana, text="ISBN del Libro:")
+        label_isbn = tk.Label(ventana, text=" ISBN del Libro:", bg="#E8DCBD", fg="#3C372B",
+                                font=("Times New Roman", 25, "bold italic"))
         label_isbn.grid(row=0, column=0)
 
-        entry_combo = ttk.Combobox(ventana, state="readonly", values=libros.listar_libros_())
+        entry_combo = ttk.Combobox(ventana, state="readonly", values=libros.listar_libros_(), width=27, font=("Times New Roman", 15, "italic"))
         entry_combo.grid(row=0, column=1)
 
-        label_id_usuario = tk.Label(ventana, text="ID del Usuario:")
+        label_id_usuario = tk.Label(ventana, text=" ID del Usuario:", bg="#E8DCBD", fg="#3C372B",
+                                font=("Times New Roman", 25, "bold italic"))
         label_id_usuario.grid(row=1, column=0)
 
-        entry_combo_u = ttk.Combobox(ventana, state="readonly", values=usuarios.listar_usuarios_())
+        entry_combo_u = ttk.Combobox(ventana, state="readonly", values=usuarios.listar_usuarios_(), width=27, font=("Times New Roman", 15, "italic"))
         entry_combo_u.grid(row=1, column=1)
 
         def prestar_libro():
@@ -389,17 +436,26 @@ class BibliotecaApp:
             except ValueError as e:
                 messagebox.showerror("Error", str(e))
 
-        boton_prestar = tk.Button(ventana, text="Prestar Libro", command=prestar_libro, bg="#E0D7BF")
+        boton_prestar = tk.Button(ventana, text="Prestar Libro", command=prestar_libro, bg="white", fg="#3C372B",
+                            font=("Times New Roman", 20, "bold italic"), width=225, height=30, compound="left",
+                            image=self.imagen_prestar_libro)
         boton_prestar.grid(row=2, column=1)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.grid(row=2, column=0, pady=10, padx=10, sticky="w")
 
     def abrir_ventana_devolver_libro(self):
         ventana = Toplevel(self.root)
         ventana.title("Devolver Libro")
-        ventana.config(bg="#EFEBDF")
+        ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 570, 537)
 
-        listbox = tk.Listbox(ventana, height=15, width=60)
-        listbox.pack()
-        listbox.grid(row=0, column=0)
+        listbox = tk.Listbox(ventana, height=15, width=60, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+        label = tk.Label(ventana, text="Seleccione un libro:", bg="#E8DCBD", fg="#3C372B",
+                         font = ("Times New Roman", 25, "bold italic"))
+        label.pack(pady=0)
+        listbox.pack(pady=10, padx=10)
         datos = prestamos.listar_prestamos_()
         if datos != []:
             for dato in datos:
@@ -410,7 +466,7 @@ class BibliotecaApp:
         def seleccion_eliminar():
             indices = listbox.curselection()
             if indices != ():
-                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                if messagebox.askokcancel("Advertencia ¿Desea devolver el libro?", message=", "
                         .join(listbox.get(i) for i in indices)):
                     datos = prestamos.listar_prestamos_()
                     dat = datos[indices[0]]
@@ -424,8 +480,13 @@ class BibliotecaApp:
                 else:
                     ventana.destroy()
 
-        boton_devolver = tk.Button(ventana, text="Devolver Libro", command=seleccion_eliminar, bg="#E0D7BF")
-        boton_devolver.grid(row=2, column=0, columnspan=2, pady=10)
+        boton_devolver = tk.Button(ventana, text="Devolver Libro", command=seleccion_eliminar, bg="white", fg="#3C372B",
+                            font=("Times New Roman", 20, "bold italic"), width=340, height=50, compound="left",
+                            image=self.imagen_devolver_libro)
+        boton_devolver.pack(pady=10)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white", width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
+        boton_regresar.pack(pady=0, padx=10, anchor="se")
 
 
     def abrir_ventana_morosidad(self):
@@ -436,25 +497,29 @@ class BibliotecaApp:
         label = tk.Label(ventana, text="Morosidad", font=("Times New Roman", 60, "bold italic"), fg="#3C372B",
                          bg="#E8DCBD", compound="center", image=self.imagen_morosidad_titulo)
         label.pack(pady=10)
-        self.centrar_ventana(ventana,660,340)
+        self.centrar_ventana(ventana, 660, 360)
 
 
-        button1 = tk.Button(ventana, text="  Morosidad", command=self.abrir_ventana_verificar_morosidad, bg="white", fg="#3C372B",
+        button1 = tk.Button(ventana, text="  Ver Morosidad", command=self.abrir_ventana_verificar_morosidad, bg="white", fg="#3C372B",
                             font=("Times New Roman", 20, "bold italic"), width=400, height=50, compound="left",
                             image=self.imagen_morosidad)
         button2 = tk.Button(ventana, text="  Devolver Libro con Morosidad", command=self.abrir_ventana_devolver_libro_c_mora, bg="white", fg="#3C372B",
                             font=("Times New Roman", 20, "bold italic"), width=400, height=50, compound="left",
                             image=self.imagen_devolver_libro)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
+                            fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
+                            compound="center", image=self.imagen_regresar)
         button1.pack(pady=10, padx=10)
         button2.pack(pady=10, padx=10)
+        boton_regresar.pack(pady=10, padx=10, anchor="se")
     def abrir_ventana_verificar_morosidad(self):
         ventana = Toplevel(self.root)
-        ventana.title("Verificar Morosidad")
-        ventana.config(bg="#EFEBDF")
+        ventana.title("Ver Prestamos Con Mora")
+        ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 1250, 380)
 
-        listbox = tk.Listbox(ventana, height=25, width=150)
-        listbox.pack()
-        listbox.grid(row=0, column=0)
+        listbox = tk.Listbox(ventana, height=15, width=130, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+        listbox.pack(pady=10, padx=10)
         datos = morosidad.leer_prestamos_p_morosidad_rec()
         if datos != []:
             for dato in datos:
@@ -466,12 +531,15 @@ class BibliotecaApp:
 
     def abrir_ventana_devolver_libro_c_mora(self):
         ventana = Toplevel(self.root)
-        ventana.title("Devolver Libro")
-        ventana.config(bg="#EFEBDF")
+        ventana.title("Devolver Libro Con Mora")
+        ventana.config(bg="#E8DCBD")
+        self.centrar_ventana(ventana, 570, 537)
 
-        listbox = tk.Listbox(ventana, height=15, width=60)
-        listbox.pack()
-        listbox.grid(row=0, column=0)
+        listbox = tk.Listbox(ventana, height=15, width=60, fg="#3C372B", font=("Times New Roman", 15, "italic"), relief="flat", bd=2)
+        label = tk.Label(ventana, text="Seleccione un libro:", bg="#E8DCBD", fg="#3C372B",
+                         font = ("Times New Roman", 25, "bold italic"))
+        label.pack(pady=0)
+        listbox.pack(pady=10, padx=10)
         datos = prestamos.listar_prestamos_()
         if datos != []:
             for dato in datos:
@@ -509,9 +577,13 @@ class BibliotecaApp:
                 else:
                     ventana.destroy()
 
-        boton_devolver = tk.Button(ventana, text="Devolver Libro", command=seleccion_eliminar, bg="#E0D7BF")
-        boton_devolver.grid(row=2, column=0, columnspan=2, pady=10)
-
+        boton_devolver = tk.Button(ventana, text="Devolver Libro Con Mora", command=seleccion_eliminar, bg="white", fg="#3C372B",
+                            font=("Times New Roman", 20, "bold italic"), width=360, height=50, compound="left",
+                            image=self.imagen_devolver_libro)
+        boton_devolver.pack(pady=10)
+        boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white", width=25, height=25,
+                                   compound="center", image=self.imagen_regresar)
+        boton_regresar.pack(pady=0, padx=10, anchor="se")
 
 
 if __name__ == "__main__":

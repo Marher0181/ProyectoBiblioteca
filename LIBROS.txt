@@ -1,4 +1,4 @@
 Autor1, ISBNA1, Titulo1
+ISBNA11, Titulo11, Autor1
 ISBNA6, Titulo6, Autor1
-ISBNA11, Titulo11, Autor1
-ISBNA11, Titulo11, Autor1
+ISBN981, Titulo1, Autor1
