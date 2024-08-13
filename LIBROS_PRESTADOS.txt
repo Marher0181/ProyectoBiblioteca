@@ -3,3 +3,6 @@ ISBNA1, Titulo1, Autor1
 ISBNA8, Titulo8, Autor1
 ISBNA5, Titulo5, Autor1
 ISBNA12, Titulo12, Autor1
+ISBNA11, Titulo11, Autor1
+ISBNA2, Titulo2, Autor1
+ISBNA6, Titulo6, Autor1

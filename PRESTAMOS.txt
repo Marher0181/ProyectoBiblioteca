@@ -1,3 +1,1 @@
-819 - Bryan, iu890u890 - Libro1 - Autor1, 2021-08-09
-782 - Marlon, ISBNA2 - Titulo2 - Autor1, 2024-08-12
-345 - Gabriel, ISBNA1 - Titulo1 - Autor1, 2024-07-12
+345 - Gabriel, ISBNA2 - Titulo2 - Autor1, 2024-08-12

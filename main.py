@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, Toplevel, ttk, Listbox
 from biblioteca import libros, usuarios, prestamos, morosidad
+from datetime import datetime, timedelta
 
 class BibliotecaApp:
     def __init__(self, root):
@@ -412,6 +413,10 @@ class BibliotecaApp:
                 if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
                         .join(listbox.get(i) for i in indices)):
                     datos = prestamos.listar_prestamos_()
+                    dat = datos[indices[0]]
+                    dat = dat.split(", ")
+                    dat = dat[1].split(" - ")
+                    libros.agregar_libro(dat[1], dat[2], dat[0])
                     datos.pop(indices[0])
                     prestamos.guardar_prestamos_(datos)
                     messagebox.showinfo("Exito!", "Eliminado exitosamente")
@@ -437,7 +442,7 @@ class BibliotecaApp:
         button1 = tk.Button(ventana, text="  Morosidad", command=self.abrir_ventana_verificar_morosidad, bg="white", fg="#3C372B",
                             font=("Times New Roman", 20, "bold italic"), width=400, height=50, compound="left",
                             image=self.imagen_morosidad)
-        button2 = tk.Button(ventana, text="  Devolver Libro con Morosidad", command=self.abrir_ventana_devolver_libro, bg="white", fg="#3C372B",
+        button2 = tk.Button(ventana, text="  Devolver Libro con Morosidad", command=self.abrir_ventana_devolver_libro_c_mora, bg="white", fg="#3C372B",
                             font=("Times New Roman", 20, "bold italic"), width=400, height=50, compound="left",
                             image=self.imagen_devolver_libro)
         button1.pack(pady=10, padx=10)
@@ -447,7 +452,7 @@ class BibliotecaApp:
         ventana.title("Verificar Morosidad")
         ventana.config(bg="#EFEBDF")
 
-        listbox = tk.Listbox(ventana, height=100, width=500)
+        listbox = tk.Listbox(ventana, height=25, width=150)
         listbox.pack()
         listbox.grid(row=0, column=0)
         datos = morosidad.leer_prestamos_p_morosidad_rec()
@@ -458,9 +463,59 @@ class BibliotecaApp:
         else:
             listbox.insert(tk.END, "No hay datos para mostrar")
 
+
+    def abrir_ventana_devolver_libro_c_mora(self):
+        ventana = Toplevel(self.root)
+        ventana.title("Devolver Libro")
+        ventana.config(bg="#EFEBDF")
+
+        listbox = tk.Listbox(ventana, height=15, width=60)
+        listbox.pack()
+        listbox.grid(row=0, column=0)
+        datos = prestamos.listar_prestamos_()
+        if datos != []:
+            for dato in datos:
+                dato = f"Prestamo: {dato}"
+                listbox.insert(tk.END, dato)
+        else:
+            listbox.insert(tk.END, "No hay datos para mostrar")
+        def seleccion_eliminar():
+            indices = listbox.curselection()
+            if indices != ():
+                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                        .join(listbox.get(i) for i in indices)):
+                    datos = prestamos.listar_prestamos_()
+                    dat = datos[indices[0]]
+                    dat = dat.split(", ")
+                    fecha_prestamo = dat[2]
+                    dat = dat[1].split(" - ")
+                    fecha_prestamo_dt = datetime.strptime(fecha_prestamo, '%Y-%m-%d')
+                    fecha_limite = fecha_prestamo_dt + timedelta(days=15)
+                    fecha_actual = datetime.today()
+                    if fecha_actual > fecha_limite:
+                        diferencia = fecha_actual - fecha_limite
+                        dias_mora = diferencia.days
+                        mora_total = dias_mora * 6
+                        if messagebox.askokcancel("MORA",f"Tu mora es de: {dias_mora} días y debes pagar: {mora_total}.00 Qtz" ):
+                            libros.agregar_libro(dat[1], dat[2], dat[0])
+                            datos.pop(indices[0])
+                            prestamos.guardar_prestamos_(datos)
+                            messagebox.showinfo("Exito!", "Eliminado exitosamente")
+                            ventana.destroy()
+                        else:
+                            ventana.destroy()
+                    else:
+                        messagebox.showinfo("Sin Mora", "No hay mora para este préstamo.")
+                else:
+                    ventana.destroy()
+
+        boton_devolver = tk.Button(ventana, text="Devolver Libro", command=seleccion_eliminar, bg="#E0D7BF")
+        boton_devolver.grid(row=2, column=0, columnspan=2, pady=10)
+
+
+
 if __name__ == "__main__":
     root = tk.Tk()
-    #tamaño de la pantalla principal
     root.geometry("300x200")
     root.config(bg="#E8DCBD")
     app = BibliotecaApp(root)
