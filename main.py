@@ -152,9 +152,12 @@ class BibliotecaApp:
             isbn = entry_isbn.get()
             if titulo != "" and autor != "" and isbn != "":
                 try:
-                    libros.agregar_libro(titulo, autor, isbn)
-                    messagebox.showinfo("Éxito", "Libro agregado exitosamente")
-                    ventana.destroy()
+                    if libros.agregar_libro(titulo, autor, isbn):
+                        messagebox.showinfo("Éxito", "Libro agregado exitosamente")
+                        ventana.destroy()
+                    else:
+                        messagebox.showwarning("Error", "ISBN Repetido, por favor inserte uno válido")
+                        ventana.destroy()
                 except ValueError as e:
                     messagebox.showerror("Error", str(e))
             else:
@@ -175,7 +178,7 @@ class BibliotecaApp:
         ventana.title("Eliminar Libro")
         ventana.geometry("240x70")
         ventana.config(bg="#E8DCBD")
-        self.centrar_ventana(ventana, 625, 500)
+        self.centrar_ventana(ventana, 700, 500)
 
 
         label = tk.Label(ventana, text="Seleccione un libro:", bg="#E8DCBD", fg="#3C372B",
@@ -207,7 +210,7 @@ class BibliotecaApp:
                     messagebox.showwarning("Error!", "Debe seleccionar una venta para eliminarla")
 
         boton_eliminar = tk.Button(ventana, text="Eliminar Libro", command=seleccion_eliminar, bg="#FFB6B5")
-        boton_eliminar.grid(row=1, column=1)
+        boton_eliminar.grid(row=2, column=1,  padx=10, sticky="se")
         boton_regresar = tk.Button(ventana, command=ventana.destroy, bg="white",
                             fg="#3C372B", font=("Times New Roman", 20, "bold italic"), width=25, height=25,
                             compound="center", image=self.imagen_regresar)

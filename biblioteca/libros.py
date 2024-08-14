@@ -4,10 +4,11 @@ libros=[]
 
 def agregar_libro(titulo, autor, isbn):
     try:
-        if any(libro['isbn'] == isbn for libro in libros):
-            raise ValueError("El ISBN ya existe")
-        with open(DATA_FILE, "a") as file:
-            file.write(f"{isbn}, {titulo}, {autor}\n")
+        if validacion(isbn):
+            with open(DATA_FILE, "a") as file:
+                file.write(f"{isbn}, {titulo}, {autor}\n")
+        else:
+            return False
     except FileNotFoundError:
         print(f"Error: El archivo {file} no fue encontrado")
 
@@ -131,3 +132,11 @@ def buscar_libro_prestado_por_isbn(isbn):
     libros = leer_libro_prestado_()
     print(libros)
     return [libro for libro in libros if isbn.lower() in libro.lower()]
+
+def validacion(isbn):
+    comparacion = leer_libro_()
+    for libro in comparacion:
+        libro = libro.split(" - ")
+        if libro[0] == isbn:
+            return False
+    return True

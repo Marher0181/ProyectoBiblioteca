@@ -1,4 +1,9 @@
-Autor1, ISBNA1, Titulo1
-ISBNA11, Titulo11, Autor1
-ISBNA6, Titulo6, Autor1
-ISBN981, Titulo1, Autor1
+5615651, Como hacer que te pasen cosas buenas, Marian Rojas
+298119, 1001 recetas de cocina, Juana la Chef
+5616615A, 2000 Recetas con Papas, Juanito
+561561113, 100 Recetas de cocina Faciles, Autor Desconocido
+9849846, Coco Chanel, Eladio
+7894489, Poesia de un desconocido, Autor Desconocido
+ISBN 48949, Titulo 1, Autor 1
+894563156, Libro 3, Autor 3
+9849846, La cabina en fuego, Eladio
