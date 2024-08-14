@@ -1,0 +1,4 @@
+ISBN Nuevo, Nuevo Libro, Autor Nuevo
+ISBN123, Titulo1, Autor1
+ISBN 1123, Libro Nuevo 1123, Autor 1123
+12312312, Nuevo libro, Si

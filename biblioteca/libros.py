@@ -7,6 +7,7 @@ def agregar_libro(titulo, autor, isbn):
         if validacion(isbn):
             with open(DATA_FILE, "a") as file:
                 file.write(f"{isbn}, {titulo}, {autor}\n")
+            return True
         else:
             return False
     except FileNotFoundError:

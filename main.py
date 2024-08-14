@@ -198,7 +198,7 @@ class BibliotecaApp:
         def seleccion_eliminar():
             indices = listbox.curselection()
             if indices != ():
-                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                if messagebox.askokcancel("Advertencia ¿Desea eliminar el libro?", message=", "
                         .join(listbox.get(i) for i in indices)):
                     datos = libros.listar_libros_()
                     datos.pop(indices[0])
@@ -207,7 +207,7 @@ class BibliotecaApp:
                     ventana.destroy()
                 else:
                     ventana.destroy()
-                    messagebox.showwarning("Error!", "Debe seleccionar una venta para eliminarla")
+                    messagebox.showwarning("Error!", "Debe seleccionar un libro para eliminarlo")
 
         boton_eliminar = tk.Button(ventana, text="Eliminar Libro", command=seleccion_eliminar, bg="#FFB6B5")
         boton_eliminar.grid(row=2, column=1,  padx=10, sticky="se")
@@ -338,7 +338,7 @@ class BibliotecaApp:
         def seleccion_eliminar():
             indices = listbox.curselection()
             if indices != ():
-                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                if messagebox.askokcancel("Advertencia ¿Desea eliminar el usuario?", message=", "
                         .join(listbox.get(i) for i in indices)):
                     datos = usuarios.listar_usuarios_()
                     datos.pop(indices[0])
@@ -349,7 +349,7 @@ class BibliotecaApp:
                     ventana.destroy()
 
             else:
-                messagebox.showwarning("Error!", "Debe seleccionar una venta para eliminarla")
+                messagebox.showwarning("Error!", "Debe seleccionar un usuario para eliminar")
         boton_eliminar = tk.Button(ventana, text="Eliminar Usuario", command=seleccion_eliminar, bg="#FFB6B5")
         boton_eliminar.grid(row=1, column=1)
         boton_eliminar.grid(row=2, column=0, pady=10)
@@ -478,7 +478,7 @@ class BibliotecaApp:
                     libros.agregar_libro(dat[1], dat[2], dat[0])
                     datos.pop(indices[0])
                     prestamos.guardar_prestamos_(datos)
-                    messagebox.showinfo("Exito!", "Eliminado exitosamente")
+                    messagebox.showinfo("Exito!", "Devuelto exitosamente")
                     ventana.destroy()
                 else:
                     ventana.destroy()
@@ -553,7 +553,7 @@ class BibliotecaApp:
         def seleccion_eliminar():
             indices = listbox.curselection()
             if indices != ():
-                if messagebox.askokcancel("Advertencia ¿Desea eliminar la venta?", message=", "
+                if messagebox.askokcancel("Advertencia ¿Desea devolver con Mora?", message=", "
                         .join(listbox.get(i) for i in indices)):
                     datos = prestamos.listar_prestamos_()
                     dat = datos[indices[0]]
@@ -571,7 +571,7 @@ class BibliotecaApp:
                             libros.agregar_libro(dat[1], dat[2], dat[0])
                             datos.pop(indices[0])
                             prestamos.guardar_prestamos_(datos)
-                            messagebox.showinfo("Exito!", "Eliminado exitosamente")
+                            messagebox.showinfo("Exito!", "Devuelto con mora exitosamente")
                             ventana.destroy()
                         else:
                             ventana.destroy()
